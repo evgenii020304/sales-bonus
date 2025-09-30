@@ -49,10 +49,10 @@ function calculateBonusByProfit(index, total, seller) {
  * @returns {{revenue: *, top_products: *, bonus: *, name: *, sales_count: *, profit: *, seller_id: *}[]}
  */
 function analyzeSalesData(data, options) {
-    const { calculateRevenue, calculateBonus } = options;
+    const {calculateRevenue, calculateBonus} = options;
 
     // @TODO: Проверка входных данных
-    if (!data
+    if(!data
         || !Array.isArray(data.sellers)
         || !Array.isArray(data.products)
         || !Array.isArray(data.purchase_records)
@@ -80,21 +80,21 @@ function analyzeSalesData(data, options) {
     // @TODO: Расчет выручки и прибыли для каждого продавца
     data.purchase_records.forEach((record) => {
         const seller = sellerIndex[record.seller_id];
-        if (!seller) return;
+        if(!seller) return;
 
         seller.sales_count += 1;
         seller.revenue += record.total_amount;
 
         record.items.forEach(item => {
             const product = productIndex[item.sku];
-            if (!product) return;
+            if(!product) return;
 
             const cost = product.purchase_price * item.quantity;
             const revenue = calculateRevenue(item, product);
             const profit = revenue - cost;
             seller.profit += profit;
 
-            if (!seller.products_sold[item.sku]) {
+            if(!seller.products_sold[item.sku]) {
                 seller.products_sold[item.sku] = 0;
             }
             seller.products_sold[item.sku] += item.quantity;
@@ -116,6 +116,7 @@ function analyzeSalesData(data, options) {
             .sort((a, b) => b.quantity - a.quantity)
             .slice(0, 10);
     });
+
 
     // @TODO: Подготовка итоговой коллекции с нужными полями
     return sellerStats.map(seller => ({

@@ -28,15 +28,18 @@ function calculateBonusByProfit(index, total, seller) {
 
     const position = index + 1;
 
+    let bonusPercentage;
     if (position === 1) {
-        return 15;
+        bonusPercentage = 15;
     } else if (position === 2 || position === 3) {
-        return 10;
+        bonusPercentage = 10;
     } else if (position === total) {
-        return 0;
+        bonusPercentage = 0;
     } else {
-        return 5;
+        bonusPercentage = 5;
     }
+
+    return profit * (bonusPercentage / 100);
 }
 
 /**
@@ -119,8 +122,8 @@ function analyzeSalesData(data, options) {
 
     // @TODO: Назначение премий на основе ранжирования
     sortedSellers.forEach((seller, index) => {
-        const bonusPercentage = calculateBonus(index, sortedSellers.length, seller);
-        seller.bonus_amount = seller.profit * (bonusPercentage / 100);
+        const bonusAmount = calculateBonus(index, sortedSellers.length, seller);
+        seller.bonus_amount = parseFloat(bonusAmount.toFixed(2));
 
         seller.top_products = Object.entries(seller.products_sold)
             .map(([sku, quantity]) => ({
